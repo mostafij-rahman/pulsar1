@@ -15,7 +15,7 @@ env:
 jobs:
 
   cli:
-    name: set base ubuntu environment
+    name: run tests
     runs-on: ubuntu-latest
     timeout-minutes: 180
 
@@ -53,11 +53,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-
-      - name: Replace maven's wagon-http version
-        if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: sudo ./build/replace_maven-wagon-http-version.sh
-
+          
       - name: clean disk
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
         run: |
