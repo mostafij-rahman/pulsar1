@@ -54,17 +54,9 @@ jobs:
           distribution: 'adopt'
           java-version: 11
           
-      - name: clean disk
+      - name: run install by tests
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: |
-          sudo swapoff -a
-          sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
-          sudo apt clean
-          docker rmi $(docker images -q) -f
-          df -h
-      - name: run install by skip tests
-        if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: mvn -q -B -fn -ntp clean install #-DskipTests
+        run: mvn -B -fn clean test #-DskipTests
         
       - name: Upload container logs
         uses: actions/upload-artifact@v2
