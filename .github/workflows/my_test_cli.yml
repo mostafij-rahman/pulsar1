@@ -53,10 +53,13 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-          
-      - name: run install by tests
+      - name: run install by skip tests
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: mvn -B -fn clean test #-DskipTests
+        run: mvn -B -fn clean install -DskipTests   
+        
+      - name: run install by tests
+        #if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
+        run: mvn -B -fn clean test 
         
       - name: Upload container logs
         uses: actions/upload-artifact@v2
