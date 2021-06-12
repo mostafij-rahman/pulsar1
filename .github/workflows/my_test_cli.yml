@@ -55,15 +55,15 @@ jobs:
 
       - name: Replace maven's wagon-http version
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: sudo ./build/replace_maven-wagon-http-version.sh
+        run: sudo replace_maven-wagon-http-version.sh
 
       - name: run unit test 'OTHER'
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: ./build/run_unit_group.sh OTHER
+        run: run_unit_group.sh OTHER
 
       - name: print JVM thread dumps when cancelled
         if: cancelled()
-        run: ./build/pulsar_ci_tool.sh print_thread_dumps
+        run: pulsar_ci_tool.sh print_thread_dumps
 
       - name: package surefire artifacts
         if: failure()
