@@ -210,7 +210,7 @@ jobs:
 
           # Test Groups  -- end --
 
-          TEST_GROUP='OTHER'
+          TEST_GROUP='BROKER_FLAKY'
 
           echo "Test Group : $TEST_GROUP"
 
