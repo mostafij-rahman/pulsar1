@@ -55,12 +55,13 @@ jobs:
 
       - name: Replace maven's wagon-http version
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: MAVEN_HOME=$(mvn -v |grep 'Maven home:' | awk '{ print $3 }')
-            if [ -d "$MAVEN_HOME" ]; then
-                cd "$MAVEN_HOME/lib"
-                rm wagon-http-*-shaded.jar
-                curl -O https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-http/3.4.3/wagon-http-3.4.3-shaded.jar
-            fi
+        run: |
+          MAVEN_HOME=$(mvn -v |grep 'Maven home:' | awk '{ print $3 }')
+          if [ -d "$MAVEN_HOME" ]; then
+            cd "$MAVEN_HOME/lib"
+            rm wagon-http-*-shaded.jar
+            curl -O https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-http/3.4.3/wagon-http-3.4.3-shaded.jar
+          fi
       - name: run unit test 'OTHER'
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
         run: run_unit_group.sh OTHER
