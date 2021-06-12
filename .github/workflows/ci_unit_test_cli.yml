@@ -64,49 +64,12 @@ jobs:
           fi
       - name: run unit test 'OTHER'
         if: ${{ steps.check_changes.outputs.docs_only != 'true' }}
-        run: |
-          set -e
-          set -o pipefail
-          set -o errexit
-
-          # solution for printing output in "set -x" trace mode without tracing the echo calls
-          shopt -s expand_aliases
-          echo_and_restore_trace() {
-            builtin echo "$@"
-            [ $trace_enabled -eq 1 ] && set -x || true
-          }
-          alias echo='{ [[ $- =~ .*x.* ]] && trace_enabled=1 || trace_enabled=0; set +x; } 2> /dev/null; echo_and_restore_trace'
-          
-          function fail {
-            echo $1 >&2
-            exit 1
-          }
-
-          function retry {
-            local n=1
-            local max=3
-            local delay=10
-            while true; do
-              "$@" && break || {
-                if [[ $n -lt $max ]]; then
-                  ((n++))
-                  echo "Command failed. Attempt $n/$max:"
-                  sleep $delay;
-                else
-                  fail "The command has failed after $n attempts."
-                fi
-              }
-            done
-          }
-
-          retry "$@"
+        run: 
+          mvn -B -fn -ntp test
           
           
-          MVN_COMMAND='mvn -B -fn -ntp'
-          MVN_COMMAND_WITH_RETRY="retry ${MVN_COMMAND}"
-          MVN_TEST_COMMAND="${MVN_COMMAND_WITH_RETRY} test"
           # echo -n "Test Group : $TEST_GROUP"
-          $MVN_TEST_COMMAN -Dgroups='quarantine,flaky' -DexcludedGroups='' -DtestForkCount=2
+          #$MVN_TEST_COMMAN -Dgroups='quarantine,flaky' -DexcludedGroups='' -DtestForkCount=2
 
       - name: package surefire artifacts
         if: failure()
